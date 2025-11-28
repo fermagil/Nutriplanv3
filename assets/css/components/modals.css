@@ -1,0 +1,570 @@
+/* ===== MODALES - NUTRIPLAN v2 ===== */
+/* Sistema de modales unificado y optimizado */
+
+/* ===== MODAL BASE ===== */
+.modal-content {
+  border: none;
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #3c9141 0%, #2e7d32 100%);
+  color: var(--white);
+  border: none;
+  padding: var(--spacing-5);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: glossyEffect 3s infinite;
+}
+
+@keyframes glossyEffect {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.modal-body {
+  background-color: var(--gray-50);
+  padding: var(--spacing-6);
+}
+
+.modal-footer {
+  background-color: var(--gray-100);
+  border-top: 1px solid var(--gray-200);
+  padding: var(--spacing-4) var(--spacing-5);
+}
+
+.btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* ===== MODAL DE EDICIÓN PRINCIPAL (#editModal) ===== */
+#editModal .modal-content {
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+}
+
+#editModal .modal-header {
+  background: linear-gradient(135deg, #407b33 0%, #5e9a4f 100%);
+  color: var(--white);
+  border: none;
+}
+
+#editModal .modal-title {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+#editModal .modal-body {
+  background-color: var(--gray-50);
+}
+
+#editModal .modal-footer {
+  background-color: var(--gray-100);
+  border-top: 1px solid var(--gray-200);
+}
+
+#editModal .save-config-btn {
+  background: linear-gradient(to right, #7cb96c 0%, #b9f7a5 100%);
+  color: var(--gray-900);
+  border: none;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  transition: all var(--transition-normal);
+}
+
+#editModal .save-config-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(124, 185, 108, 0.4);
+}
+
+/* ===== SECCIONES DE CONFIGURACIÓN DEL MODAL EDIT ===== */
+#editModal .phase-config-section {
+  background: var(--gray-50);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-5);
+  margin-bottom: var(--spacing-5);
+  border: 1px solid var(--gray-200);
+}
+
+#editModal .phase-config-section h5 {
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-4);
+  font-size: var(--font-size-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+#editModal .phase-config-section h5 i {
+  color: var(--secondary-green);
+}
+
+/* ===== ESTRATEGIAS BASE - RADIO GROUP ===== */
+#editModal .radio-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+#editModal .radio-option {
+  background: var(--white);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-4);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+#editModal .radio-option:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+#editModal .radio-option.selected {
+  border-color: var(--secondary-green);
+  background-color: var(--light-green);
+}
+
+#editModal .radio-option input {
+  display: none;
+}
+
+#editModal .radio-option label {
+  font-weight: 600;
+  margin-bottom: var(--spacing-1);
+  display: block;
+}
+
+#editModal .radio-option p {
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+  margin-bottom: 0;
+}
+
+/* ===== ACORDEONES EN MODALES ===== */
+#editModal .accordion {
+  margin-bottom: var(--spacing-4);
+}
+
+#editModal .accordion-item {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+#editModal .accordion-header {
+  background-color: var(--white);
+  padding: 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+#editModal .accordion-button {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-weight: 500;
+  color: var(--gray-700);
+  background-color: var(--white);
+  border: none;
+  box-shadow: none;
+  transition: background-color var(--transition-normal);
+}
+
+#editModal .accordion-button:hover {
+  background-color: rgba(94, 154, 79, 0.05);
+}
+
+#editModal .accordion-button:not(.collapsed) {
+  background-color: var(--gray-50);
+  color: var(--secondary-green);
+  font-weight: 600;
+}
+
+#editModal .accordion-button::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%235e9a4f'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+#editModal .accordion-body {
+  padding: var(--spacing-4);
+  background-color: var(--gray-50);
+}
+
+/* ===== ESTRATEGIAS ESPECÍFICAS - CLASIFICACIÓN ===== */
+#editModal .strategy-item {
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-3);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  transition: all var(--transition-fast);
+}
+
+#editModal .strategy-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Clasificación RECOMENDADA */
+#editModal .strategy-recomendada {
+  background-color: #e8f5e9 !important;
+  border-color: #c8e6c9 !important;
+  border-left: 4px solid #4caf50;
+}
+
+#editModal .badge-recomendada {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+/* Clasificación NEUTRAL */
+#editModal .strategy-neutral {
+  background-color: var(--gray-50) !important;
+  border-color: var(--gray-300) !important;
+  border-left: 4px solid var(--gray-500);
+}
+
+#editModal .badge-neutral {
+  background-color: var(--gray-50);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-300);
+}
+
+/* Clasificación CONTRAINDICADA */
+#editModal .strategy-contraindicada {
+  background-color: #ffebee !important;
+  border-color: #ffcdd2 !important;
+  border-left: 4px solid #f44336;
+}
+
+#editModal .badge-contraindicada {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+#editModal .strategy-badge {
+  font-weight: 600;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 20px;
+  font-size: var(--font-size-xs);
+}
+
+/* ===== CONFIGURACIÓN DE MACROS EN MODAL ===== */
+#editModal .macro-config {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+#editModal .macro-input {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-4);
+  box-shadow: var(--shadow-sm);
+}
+
+#editModal .macro-input label {
+  display: block;
+  margin-bottom: var(--spacing-2);
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+#editModal .macro-input input {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius-lg);
+  font-weight: 500;
+  text-align: center;
+}
+
+#editModal .macro-input input:focus {
+  border-color: var(--secondary-green);
+  box-shadow: 0 0 0 0.25rem rgba(94, 154, 79, 0.25);
+}
+
+/* ===== MODAL DE EVIDENCIA CIENTÍFICA (#evidenciaModal) ===== */
+#evidenciaModal .modal-header {
+  background-color: #2a6621;
+}
+
+#evidenciaModal .modal-title {
+  color: var(--white);
+}
+
+#evidenciaModal .table th {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+}
+
+#evidenciaModal .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(232, 245, 233, 0.5);
+}
+
+#evidenciaModal a {
+  color: var(--primary-green);
+  text-decoration: none;
+}
+
+#evidenciaModal a:hover {
+  text-decoration: underline;
+}
+
+/* ===== MODAL DE EDICIÓN DE FILA (#editarFilaModal) ===== */
+#editarFilaModal .modal-content {
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--gray-300);
+}
+
+#editarFilaModal .modal-header {
+  background-color: var(--success-color);
+  color: var(--white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#editarFilaModal .modal-title {
+  font-weight: 500;
+  font-size: var(--font-size-lg);
+}
+
+#editarFilaModal .modal-body {
+  padding: var(--spacing-5);
+  background-color: var(--gray-50);
+}
+
+#editarFilaModal .seccion-modal {
+  background-color: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-5);
+  box-shadow: var(--shadow-sm);
+}
+
+#editarFilaModal .seccion-modal h6 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-3);
+  padding-bottom: var(--spacing-1);
+  border-bottom: 1px solid var(--gray-200);
+  color: var(--success-color);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+/* Configuración de estrategias en fila */
+#editarFilaModal .fila-configuracion-estrategia {
+  background-color: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+#editarFilaModal .fila-configuracion-estrategia:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--gray-400);
+}
+
+#editarFilaModal .cabecera-fila-estrategia {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-3);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+#editarFilaModal .nombre-estrategia {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--info-color);
+}
+
+#editarFilaModal .boton-cerrar-fila-estrategia {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--gray-500);
+  opacity: 0.7;
+  cursor: pointer;
+  padding: var(--spacing-1);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+}
+
+#editarFilaModal .boton-cerrar-fila-estrategia:hover {
+  color: var(--gray-900);
+  opacity: 1;
+  background-color: var(--gray-200);
+}
+
+/* ===== MODAL CALCULADORA NO LINEAL (#modalCalculadoraNoLineal) ===== */
+#modalCalculadoraNoLineal .modal-content {
+  border: none;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 10px 30px rgba(86, 138, 61, 0.2);
+  overflow: hidden;
+}
+
+#modalCalculadoraNoLineal .modal-header {
+  background: linear-gradient(135deg, #3c9141 0%, #2e7d32 100%);
+  color: var(--white);
+  border: none;
+  padding: var(--spacing-5);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(60, 145, 65, 0.3);
+}
+
+#modalCalculadoraNoLineal .card {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal);
+  margin-bottom: var(--spacing-4);
+}
+
+#modalCalculadoraNoLineal .card:hover {
+  box-shadow: 0 4px 20px rgba(86, 138, 61, 0.15);
+}
+
+#modalCalculadoraNoLineal .form-card {
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+  border-left: 4px solid #568a3d;
+}
+
+#modalCalculadoraNoLineal .summary-card {
+  background: linear-gradient(135deg, var(--light-green) 0%, #f1f8e9 100%);
+  border-left: 4px solid #568a3d;
+}
+
+/* ===== COMPORTAMIENTO RESPONSIVE PARA MODALES ===== */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: var(--spacing-2);
+    max-width: calc(100% - var(--spacing-4));
+  }
+  
+  .modal-body {
+    padding: var(--spacing-4);
+  }
+  
+  #editModal .radio-group {
+    grid-template-columns: 1fr;
+  }
+  
+  #editModal .macro-config {
+    grid-template-columns: 1fr;
+  }
+  
+  #editarFilaModal .cabecera-fila-estrategia {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+  }
+  
+  #editarFilaModal .boton-cerrar-fila-estrategia {
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-header {
+    padding: var(--spacing-4);
+  }
+  
+  .modal-title {
+    font-size: var(--font-size-lg);
+  }
+  
+  #editModal .phase-config-section {
+    padding: var(--spacing-4);
+  }
+  
+  #editarFilaModal .seccion-modal {
+    padding: var(--spacing-3);
+  }
+}
+
+/* ===== UTILIDADES ESPECÍFICAS PARA MODALES ===== */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-scrollable {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+/* Efectos de entrada para modales */
+.modal.fade .modal-dialog {
+  transform: translate(0, -50px);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+}
+
+/* ===== ESTADOS DE VALIDACIÓN EN FORMULARIOS DE MODALES ===== */
+#editarFilaModal .is-valid {
+  border-color: var(--success-color) !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+#editarFilaModal .is-invalid {
+  border-color: var(--error-color) !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+#editarFilaModal .text-success {
+  color: var(--success-color) !important;
+}
+
+#editarFilaModal .text-danger {
+  color: var(--error-color) !important;
+}
+
+/* ===== FIN DE ESTILOS DE MODALES ===== */

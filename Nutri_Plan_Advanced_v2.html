@@ -1,0 +1,3485 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.7.3/firebase-auth-compat.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.0/html-docx.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+ 
+<title>Plan Dietético Personalizado - NutriPlan v2</title>
+
+<!-- Sistema CSS modularizado de NutriPlan -->
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/components/modals.css">
+<link rel="stylesheet" href="assets/css/components/tables.css">
+<link rel="stylesheet" href="assets/css/components/forms.css">
+<link rel="stylesheet" href="assets/css/components/navigation.css">
+<link rel="stylesheet" href="assets/css/components/charts.css">
+<link rel="stylesheet" href="assets/css/components/components.css">
+<link rel="stylesheet" href="assets/css/animations.css">
+   
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+	  <a href="#" id="logo">NutriPlan_v2</a>
+	</div>
+	    <div class="dropdown" id="dropdown">
+	        <a href="#" onclick="logout()">Cerrar Sesión</a>
+	    </div>
+        <nav>
+            <ul>
+                <li><a href="https://fermagil.github.io/Nutri_Plan_v2/Inicio_NutriPlan_v2.html">Inicio</a></li>
+				<li><a href="https://fermagil.github.io/Nutri_Plan_v2/Valoracion_Antropometrica_1.html">Valoración Antropometrica</a></li>
+                <li><a href="#" class="active">Planificación Avanzada</a></li>
+                <li><a href="https://fermagil.github.io/Nutri_Plan_v2/Calculadora_keto_recetas.html">Calculadora</a></li>
+            </ul>
+        </nav>
+    </header>
+	
+    <main>
+				<section>
+					<h1>Crea tu Plan Dietético Personalizado</h1>
+					<p style="text-align: center; max-width: 700px; margin: 0 auto 30px auto; color: #495057;">
+						Sigue estos pasos guiados para obtener una estimación de tus necesidades nutricionales y generar un plan de comidas orientativo.
+						Antes de utilizar los datos obtenidos con esta herramienta, consulta con su Dietista-Nutricionista.
+					</p>
+			</section>
+	    <section>
+    <div class="plan-step" id="step-1">
+    <h2>1. Calcula tus Necesidades y Balance Energético</h2>
+    <p>Introduce tus datos básicos para estimar tu Gasto Energético Total (GET) y, si lo deseas, tu ingesta actual para ver tu balance energético.</p>
+    <form id="calorie-form" class="row">
+        <div class="col-md-6">
+            <label for="age">Edad (años):</label>
+            <input type="number" id="age" name="age" required min="1" max="120">
+
+            <label for="gender">Género Biológico:</label>
+            <select id="gender" name="gender">
+                <option value="male">Masculino</option>
+                <option value="female">Femenino</option>
+            </select>
+
+            <label for="weight">Peso Actual (kg):</label>
+            <input type="number" id="weight" name="weight" required min="1" step="0.1">
+
+            <label for="height">Altura (m):</label>
+            <input type="number" id="height" name="height" step="0.01" required min="0.5" max="3" placeholder="Ej: 1.75">
+
+            <label for="activity">Nivel de Actividad Física Semanal:</label>
+            <select id="activity" name="activity">
+                <option value="sedentary">Sedentario</option>
+                <option value="light">Ligero (1-3 días/sem)</option>
+                <option value="moderate">Moderado (3-5 días/sem)</option>
+                <option value="active">Activo (6-7 días/sem)</option>
+                <option value="very_active">Muy Activo (Intenso/Diario)</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="estimated-intake">Tu Ingesta Calórica Estimada Actual (kcal/día, opcional):</label>
+            <input type="number" id="estimated-intake" name="estimated-intake" min="0" step="1" placeholder="Si la conoces, ej: 2100">
+
+            <label for="condition">Condición Corporal:</label>
+            <select id="condition" name="condition">
+                <option value="auto">Automático (basado en IMC)</option>
+                <option value="obese">Obeso</option>
+                <option value="overweight">Sobrepeso</option>
+                <option value="normal">Normopeso</option>
+                <option value="underweight">Infrapeso</option>
+                <option value="athlete">Atleta</option>
+            </select>
+
+            <label for="formula">
+                Fórmula de Cálculo: 
+                <span class="tooltip-container">
+                    <i class="bi bi-info-circle-fill tooltip-icon"></i>
+                    <span class="tooltip-text">Elige una fórmula para estimar tu metabolismo basal o usa 'Automático' para la mejor opción</span>
+                </span>
+            </label>
+            <select id="formula" name="formula">
+                <option value="auto" selected title="El sistema elige la mejor fórmula según tu edad y peso">Automático (recomendado para cualquier persona)</option>
+                <option value="harris-benedict" title="Fórmula clásica para adultos con peso normal o bajo">Harris-Benedict (adultos 18+, peso normal o bajo, cualquier actividad)</option>
+                <option value="oms" title="Fórmula para adultos, ideal para mayores o poca actividad">OMS/FAO/ONU (adultos 18+, especialmente 30–60+, actividad baja a moderada)</option>
+                <option value="mifflin" title="Fórmula precisa para sobrepeso, obesidad o atletas">Mifflin-St Jeor (adultos 18+, sobrepeso, obesidad o atletas, cualquier actividad)</option>
+                <option value="oms-adolescent" title="Fórmula para adolescentes con actividad moderada o alta">OMS Adolescentes (10–18 años, actividad moderada a alta)</option>
+            </select>
+
+            <label>
+                <input type="checkbox" id="buffer" name="buffer"> Aplicar 10% margen adicional (para TEF o variabilidad)
+                <span class="tooltip-container">
+                    <i class="bi bi-exclamation-diamond-fill tooltip-icon"></i>
+                    <span class="tooltip-text">Se recomienda un margen adicional del 10% para TEF y variabilidad (e.g., metabolismo basal, actividad física). Usa 10% si el MB es bajo/incierto o la actividad varía; 7-8% si la actividad es moderada/alta y los datos son precisos. Evalúa tu rutina y estado metabólico para ajustar.</span>
+                </span>
+            </label>
+
+            <div class="text-center mt-4">
+				<button type="submit" form="calorie-form">Calcular GET y Balance</button>
+			</div>
+        </div>
+    </form>
+    <div id="errorMeals" class="error-message" style="display:none;"></div>
+    <div id="errorMacros" class="error-message" style="display:none;"></div>
+    <div id="calorie-result" style="display:none;"></div>
+    <div id="energy-balance-result" style="display:none;"></div>
+    <div id="recommendationResultDiv" style="display:none;"></div>
+</div>
+</section>
+        <section>
+    <div class="plan-step" id="step-2">
+        <h2>2. Establece tu Objetivo de Peso y Composición Corporal</h2>
+
+        <!-- Texto con icono integrado en línea -->
+        <div class="mb-3">
+            <h5 class="form-label">Objetivo General Mejora Composición Corporal</h5>
+            <select id="objetivoGeneral" class="form-select">
+                <option value="salud">Salud</option>
+                <option value="estetico">Estético</option>
+                <option value="rendimiento">Rendimiento (Deportivo)</option>
+            </select>
+        </div>
+
+        <div class="text-with-icon">
+            <p>Define tu objetivo de composición corporal (% GR). Puedes estimar tu % GR actual con básculas de bioimpedancia o calculadoras online.</p>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#evidenciaModal" class="target-icon">🎯</a>
+        </div>
+
+        <div class="info-box">
+            <p><em>Si no conoces tu % de GR y/o tu % MLG actual, ve a la sección <a href="https://fermagil.github.io/Nutri_Plan_v2/Valoracion_Antropometrica_1.html" target="_blank" rel="noopener noreferrer">Valoración Antropométrica</a> de NutriPlan_v2. Si aún no estás listo para usarla, puedes usar una <a href="https://www.calculator.net/body-fat-calculator.html" target="_blank" rel="noopener noreferrer">calculadora online</a> (en inglés) o buscar alternativas en español.</em></p>
+        </div>
+
+								
+									<h3>Objetivo Nutricional</h3>
+										<div class="info-notice" style="display: none; background-color: #e8f5e9; padding: 15px; border-left: 4px solid #2e7d32; border-radius: 4px; font-style: italic;">
+											<p>ℹ️ <strong>Información importante:</strong></p>
+											<p>Los valores asignados en los campos son <strong>estimaciones orientativas</strong> basadas en tu perfil. Pueden servir como punto de partida, pero <strong>no sustituyen una evaluación precisa</strong>.</p>
+											<p>Para una valoración más exacta, te recomendamos utilizar la herramienta <strong>Valoración Antropométrica de NutriPlan_v2</strong>, que permite introducir medidas reales (pliegues, perímetros) para calcular tu %grasa y masa magra con mayor precisión.</p>
+											<p><em>Puedes modificar estos valores en cualquier momento según tus objetivos o tras una evaluación profesional.</em></p>
+										</div>
+
+				                        <label for="objetivo" class="form-label">Selecciona tu objetivo:</label>
+				                         <select id="objetivo" class="form-control" aria-label="Objetivo nutricional" required>
+											<option value="sel">Selecciona segun Objetivo</option> 
+				                            <option value="perdida1">1. Pérdida de Peso</option>
+				                            <option value="ganancia1">2. Ganancia de Peso</option>
+				                            <option value="mantenimiento1">3. Mantenimiento</option>
+				                            <option value="mixto1">4. Mixto/Combinado</option>
+				                        </select>
+										
+								
+							
+						<!-- Modal for Evidence Table with Increased Width -->
+						<div class="modal fade" id="evidenciaModal" tabindex="-1" aria-labelledby="evidenciaModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-xl">
+								<div class="modal-content">
+									<div class="modal-header" style="background-color: #2a6621;">
+										<h5 class="modal-title" id="evidenciaModalLabel" style="color: #ffffff;">Evidencia Científica de los Rangos</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<div class="table-responsive">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Objetivo</th>
+														<th>Categoría de AF</th>
+														<th>Rango (% GR, % MLG)</th>
+														<th>Justificación Científica</th>
+														<th>Referencias</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Salud</td>
+														<td>♂️ Sedentarios</td>
+														<td>15-25% GR, 75-85% MLG</td>
+														<td>Según ACSM, el rango saludable para ♂️ sedentarios es 18-24% GR, con 15-25% aceptable según edad.</td>
+														<td><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1503824" target="_blank">NEJM (2016)</a></td>
+													</tr>
+													<tr>
+														<td>Salud</td>
+														<td>♀️ Sedentarias</td>
+														<td>20-30% GR, 70-80% MLG</td>
+														<td>♀️ tienen mayor GR esencial; ACSM sugiere 25-31%, con 20-30% como subconjunto saludable.</td>
+														<td><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31310-2/fulltext" target="_blank">Lancet (2018)</a></td>
+													</tr>
+													<tr>
+														<td>Salud</td>
+														<td>♂️ con AF Leve</td>
+														<td>10-18% GR, 82-90% MLG</td>
+														<td>Individuos activos muestran menor GR por mayor gasto energético; 10-18% es óptimo con AF leve.</td>
+														<td><a href="https://www.nature.com/articles/s41591-019-0565-1" target="_blank">Nature Medicine (2019)</a></td>
+													</tr>
+													<tr>
+														<td>Salud</td>
+														<td>♀️ con AF Leve</td>
+														<td>18-25% GR, 75-82% MLG</td>
+														<td>Alineado con rangos atléticos saludables, preservando GR esencial y mayor MLG.</td>
+														<td><a href="https://jamanetwork.com/journals/jama/article-abstract/2768357" target="_blank">JAMA (2020)</a></td>
+													</tr>
+													<tr>
+														<td>Salud</td>
+														<td>♂️ con AF Moderada</td>
+														<td>8-15% GR, 85-92% MLG</td>
+														<td>Rango común en ♂️ moderadamente activos, respaldado por evaluaciones de fitness.</td>
+														<td><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2034577" target="_blank">NEJM (2021)</a></td>
+													</tr>
+													<tr>
+														<td>Salud</td>
+														<td>♀️ con AF Moderada</td>
+														<td>15-22% GR, 78-85% MLG</td>
+														<td>Refleja un balance de GR esencial y MLG en ♀️ moderadamente activas.</td>
+														<td><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(19)32531-2/fulltext" target="_blank">Lancet (2019)</a></td>
+													</tr>
+													<tr>
+														<td>Estético</td>
+														<td>♂️ Sedentarios</td>
+														<td>12-20% GR, 80-88% MLG</td>
+														<td>Rango estéticamente agradable donde comienza a definirse la musculatura sin extrema delgadez.</td>
+														<td><a href="https://www.nature.com/articles/s41591-018-0278-4" target="_blank">Nature Medicine (2018)</a></td>
+													</tr>
+													<tr>
+														<td>Estético</td>
+														<td>♀️ Sedentarias</td>
+														<td>20-28% GR, 72-80% MLG</td>
+														<td>♀️ buscan 20-28% GR para balancear curvas con aspecto tonificado.</td>
+														<td><a href="https://jamanetwork.com/journals/jama/article-abstract/2763084" target="_blank">JAMA (2019)</a></td>
+													</tr>
+													<tr>
+														<td>Estético</td>
+														<td>♂️ con AF Leve</td>
+														<td>10-15% GR, 85-90% MLG</td>
+														<td>AF leve reduce GR a 10-15%, mejorando visibilidad muscular.</td>
+														<td><a href="https://www.nature.com/articles/s41591-020-01189-4" target="_blank">Nature Medicine (2020)</a></td>
+													</tr>
+													<tr>
+														<td>Estético</td>
+														<td>♀️ con AF Leve</td>
+														<td>18-24% GR, 76-82% MLG</td>
+														<td>Refleja un aspecto estético más delgado con AF leve.</td>
+														<td><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30185-9/fulltext" target="_blank">Lancet (2020)</a></td>
+													</tr>
+													<tr>
+														<td>Estético</td>
+														<td>♂️ con AF Moderada-Intensa</td>
+														<td>8-12% GR, 88-92% MLG</td>
+														<td>Competidores de fisicoculturismo apuntan a 8-12% GR para definición.</td>
+														<td><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2109730" target="_blank">NEJM (2021)</a></td>
+													</tr>
+													<tr>
+														<td>Estético</td>
+														<td>♀️ con AF Moderada-Intensa</td>
+														<td>15-20% GR, 80-85% MLG</td>
+														<td>Competidoras femeninas mantienen 15-20% GR para look esculpido.</td>
+														<td><a href="https://www.nature.com/articles/s41591-021-01467-4" target="_blank">Nature Medicine (2021)</a></td>
+													</tr>
+													<tr>
+														<td>Rendimiento (Deportivo)</td>
+														<td>♂️ con AF Moderada-Intensa</td>
+														<td>10-18% GR, 82-90% MLG</td>
+														<td>Atletas generales equilibran potencia y resistencia en este rango.</td>
+														<td><a href="https://jamanetwork.com/journals/jama/article-abstract/2776377" target="_blank">JAMA (2021)</a></td>
+													</tr>
+													<tr>
+														<td>Rendimiento (Deportivo)</td>
+														<td>♀️ con AF Moderada-Intensa</td>
+														<td>18-25% GR, 75-82% MLG</td>
+														<td>Refleja necesidades de rendimiento y salud en ♀️ atletas.</td>
+														<td><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(21)00753-5/fulltext" target="_blank">Lancet (2021)</a></td>
+													</tr>
+													<tr>
+														<td>Rendimiento (Deportivo)</td>
+														<td>♂️ Atletas de Fuerza</td>
+														<td>8-15% GR, 85-92% MLG</td>
+														<td>Atletas de fuerza optimizan relación potencia-peso con 8-15% GR.</td>
+														<td><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2115133" target="_blank">NEJM (2022)</a></td>
+													</tr>
+													<tr>
+														<td>Rendimiento (Deportivo)</td>
+														<td>♀️ Atletas de Fuerza</td>
+														<td>15-22% GR, 78-85% MLG</td>
+														<td>♀️ atletas de fuerza balancean fuerza con GR esencial (15-22%)</td>
+														<td><a href="https://www.nature.com/articles/s41591-022-01845-6" target="_blank">Nature Medicine (2022)</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+										</div>
+								</div>
+							</div>
+						</div>
+
+						<form id="weight-goal-form">
+							<label for="current-fat-percentage">Grasa Corporal Actual (%):</label>
+							<input type="number" id="current-fat-percentage" name="current-fat-percentage" step="0.1" min="3" max="60" required placeholder="Ej: 25">
+
+							<label for="target-fat-percentage">Grasa Corporal Objetivo (%):</label>
+							<input type="number" id="target-fat-percentage" name="target-fat-percentage" step="0.1" min="3" max="60" required placeholder="Ej: 15">
+							
+							<label for="target-muscle-percentage">Masa Muscular (%)</label>
+							<input type="number" id="target-muscle-percentage" name="target-muscle-percentage" step="0.1" min="20" max="95"  placeholder="Ej: 70">
+
+							<label for="desired-lean-mass-gain">Masa Muscular Objetivo Kg (	opcional):</label>
+							<input type="number" id="desired-lean-mass-gain" name="desired-lean-mass-gain" step="0.1" min="0" placeholder="Ej: 2 (Dejar en blanco o 0 si no buscas ganar músculo)">
+
+							<label for="is-athlete">¿Te consideras deportista/atleta?</label>
+							<select id="is-athlete" name="is-athlete">
+								<option value="no">No</option>
+								<option value="yes">Sí</option>
+							</select>
+
+							<button type="submit" id="calculate-goal-button">Calcular Objetivo y Recomendaciones</button>
+						</form>
+
+						<div id="weight-goal-result" style="display:none;">
+							<p class="info-message">Completa el Paso 1 para habilitar este cálculo.</p>
+							
+						</div>
+					</div>
+				</section>
+
+			<section>
+				
+				<div class="plan-step" id="step-6"> <h2>3. Estimación de Tiempo (Manual y Opcional)</h2>
+                    <p>Estima cuánto tiempo podría llevarte alcanzar un cambio de peso específico basándote en un déficit o superávit calórico semanal <strong>que tú definas</strong>. Este cálculo es independiente de la tabla automática del Paso 5 y se usa para la tabla manual del Paso 7.</p>
+                    <form id="time-estimation-form">
+                        <label for="weight-change-goal">Cambio de Peso Total Deseado (kg):</label>
+                        <input type="number" id="weight-change-goal" name="weight-change-goal" step="0.1" required placeholder="Ej: -10 para perder, 5 para ganar">
+
+                        <label for="weekly-calorie-diff">Diferencia Calórica Semanal Estimada (kcal):</label>
+                        <input type="number" id="weekly-calorie-diff" name="weekly-calorie-diff" step="100" required placeholder="Ej: -3500 para perder 0.5kg/sem, 2000 para ganar">
+                        
+
+                      <button type="submit" id="estimate-time-button" >Estimar Tiempo</button>
+						<a href="#"
+							   data-bs-toggle="modal"
+							   data-bs-target="#modalCalculadoraNoLineal"
+							   class="target-icon-subtle"
+							   style="display: none; align-items: center; gap: 5px; text-decoration: none; color: #28a745;">
+								<i class="bi bi-clipboard2-data-fill" style="font-size: 1.2em; color: #28a745; transition: color 0.3s ease;"></i>
+								<span class="text">Ver gráfico</span>
+							</a>
+					
+					  <p></p>
+					  
+					   <div><small><strong>Nota:</strong> Se estima que 7700 kcal equivalen a 1 kg de grasa corporal. Para perdida gradual y sostenible no se aconseja perdidas de mas de 0.5kg/sem (3500kcal/sem). Para ganacia no se aconseja ganacias de mas de 0.3kg/sem (2000Kcal/sem) </small></div>
+                      
+                    </form>
+					
+					<div id="time-estimation-result" style="display:none;">
+                         <p class="info-message">Completa los pasos 1 y 2 para habilitar esta estimación.</p>
+                    </div>
+					
+                    <div id="time-estimation-chart-container">
+						<canvas id="timeEstimationChart"></canvas>
+					</div>
+					
+                </div>
+				
+					
+			</section>
+				
+				
+			<section>
+                <div class="plan-step" id="step-3">
+                    <h2>4. Calcula tus Macronutrientes</h2>
+
+					<p>
+						Una vez definido tu <strong>objetivo calórico diario</strong> (basado en tu Gasto Energético Total - GET y tu meta de pérdida, mantenimiento o ganancia de peso), 
+						es momento de distribuir esas calorías entre los tres macronutrientes esenciales: 
+						<strong>proteínas, carbohidratos y grasas</strong>.
+					</p>
+
+					<p>
+						<strong style="color: #468A45;">Para pérdida de peso:</strong> 
+						Se recomienda un déficit moderado del <strong>10–20%</strong> respecto a tu GET, 
+						lo que permite una pérdida gradual, sostenible y con buena preservación de masa muscular. 
+						<em>Nuestro cálculo automático se basa en un déficit del 10%, ideal para comenzar sin impactos metabólicos extremos.</em>
+					</p>
+
+					<p>
+						<strong style="color: #468A45;">Para ganancia de peso:</strong> 
+						Un superávit del <strong>5–15%</strong> sobre tu GET favorece la hipertrofia muscular con un control adecuado del aumento de grasa. 
+						<em>El cálculo automático utiliza un superávit del 5%, óptimo para una ganancia muscular progresiva y de calidad.</em>
+					</p>
+
+					<p>
+						<strong style="color: #468A45;">Tu ingesta diaria puede ajustarse dinámicamente</strong> según:
+						<ul>
+							<li>Tu nivel de Actividad Física (AF) y tipo de entrenamiento</li>
+							<li>El <strong>ciclo nutricional</strong> en el que te encuentres (carga, mantenimiento, descarga)</li>
+							<li>La <strong>estrategia específica</strong> adaptada a tu objetivo:</li>
+						</ul>
+					</p>
+
+					<!-- Tabla de estrategias por objetivo -->
+					<!-- Tabla de rangos y estrategias por objetivo -->
+					<!-- Botón que abre el modal -->
+						<div style="margin: 16px 0; font-size: 0.95em; line-height: 1.6;">
+							<strong style="color: #468A45;">
+								Según tu objetivo, se recomiendan los siguientes rangos y estrategias nutricionales:
+							</strong>
+							<button type="button" 
+									class="btn p-0 ms-1" 
+									data-bs-toggle="modal" 
+									data-bs-target="#nutricionModal">
+								<span style="color: #FF6D00; font-size: 1.3em; vertical-align: middle;">🎯</span>
+							</button>
+						</div>
+
+						<!-- Modal -->
+						<!-- Modal con ancho reducido en 10% -->
+							<div class="modal fade" id="nutricionModal" tabindex="-1" aria-labelledby="nutricionModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-xl" style="max-width: 70%; width: 45%;">
+									<div class="modal-content" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+										
+										<!-- Encabezado con texto blanco garantizado -->
+										<div class="modal-header" style="background: #108215;">
+											<h5 class="modal-title" style="color: white !important; font-weight: 600;">
+												<strong>🎯 Rangos y Estrategias Nutricionales por Objetivo</strong>
+											</h5>
+											<button type="button"
+													class="text-white bg-transparent border-0 fs-4"
+													data-bs-dismiss="modal"
+													aria-label="Cerrar"
+													style="font-weight: bold; outline: none; box-shadow: none;">
+												×
+											</button>
+										</div>
+
+										<!-- Cuerpo con scroll y tabla -->
+										<div class="modal-body p-0" style="max-height: 70vh; overflow: hidden;">
+											<div style="overflow-x: auto; max-height: 60vh;">
+												<table style="
+													width: 100%; 
+													border-collapse: collapse; 
+													font-size: 0.95em;
+													background: #f9f9f9;
+													min-width: 750px;
+													box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+												">
+													<thead style="position: sticky; top: 0; z-index: 1;">
+														<tr style="background: #108215; color: white;">
+															<th style="padding: 14px; text-align: left; font-weight: 600; min-width: 160px;">Objetivo</th>
+															<th style="padding: 14px; text-align: left; font-weight: 600; min-width: 230px;">Rangos Recomendados</th>
+															<th style="padding: 14px; text-align: left; font-weight: 600; min-width: 280px;">Estrategia Nutricional</th>
+														</tr>
+													</thead>
+													<tbody>
+														<!-- PÉRDIDA DE PESO (2 filas) -->
+														<tr>
+															<td rowspan="2" style="padding: 16px; background: #F1F8E9; font-weight: 700; color: #2E7D32; vertical-align: top;">
+																<strong>Pérdida de peso</strong>
+															</td>
+															<td style="padding: 14px; background: #F1F8E9; border-bottom: 1px dashed #108215; vertical-align: top;">
+																<strong>Cetogénica inicial:</strong><br>
+																<strong>GR: 65–75%</strong><br>
+																<strong>PT: 20–25%</strong> (1.8–2.6 g/kg)<br>
+																<strong>HC: 5–10%</strong> (<50 g/día)
+															</td>
+															<td style="padding: 14px; background: #F1F8E9; border-bottom: 1px dashed #108215; vertical-align: top;">
+																<strong>🎯 Enfoque:</strong> Cetosis inicial + hiperproteica<br>
+																<strong>• Clave:</strong> Preservar masa muscular<br>
+																<strong>• Estrategias:</strong> TKD, ciclos proteicos, ayuno
+															</td>
+														</tr>
+														<tr style="background: #F1F8E9;">
+															<td style="padding: 14px; border-bottom: 1px dashed #108215; vertical-align: top;">
+																<strong>Transición:</strong><br>
+																<strong>GR: 40–50%</strong><br>
+																<strong>PT: 25–30%</strong><br>
+																<strong>HC: 20–25%</strong> (100–150 g/día)
+															</td>
+															<td style="padding: 14px; border-bottom: 1px dashed #108215; vertical-align: top;">
+																<strong>🎯 Enfoque:</strong> Recarga metabólica<br>
+																<strong>• Clave:</strong> Sensibilidad a insulina<br>
+																<strong>• Estrategias:</strong> Ciclado de carbohidratos
+															</td>
+														</tr>
+
+														<!-- GANANCIA DE PESO -->
+														<tr>
+															<td style="padding: 16px; font-weight: 600; color: #2E7D32; background: #F9F9F9; vertical-align: top;">
+																<strong>Ganancia de peso</strong>
+															</td>
+															<td style="padding: 14px; background: #FFFFFF; vertical-align: top;">
+																<strong>GR: 25–35%</strong><br>
+																<strong>PT: 25–30%</strong> (1.6–2.2 g/kg)<br>
+																<strong>HC: 40–50%</strong> (300–500 g/día)
+															</td>
+															<td style="padding: 14px; background: #FFFFFF; vertical-align: top;">
+																<strong>💪 Enfoque:</strong> Superávit controlado<br>
+																<strong>• Clave:</strong> Síntesis proteica post-entreno<br>
+																<strong>• Estrategias:</strong> CKD, timing nutricional
+															</td>
+														</tr>
+
+														<!-- MANTENIMIENTO -->
+														<tr>
+															<td style="padding: 16px; font-weight: 600; color: #2E7D32; background: #F1F8E9; vertical-align: top;">
+																<strong>Mantenimiento</strong>
+															</td>
+															<td style="padding: 14px; background: #F1F8E9; vertical-align: top;">
+																<strong>GR: 30–35%</strong><br>
+																<strong>PT: 20–25%</strong> (1.6–2.0 g/kg)<br>
+																<strong>HC: 35–45%</strong> (200–300 g/día)
+															</td>
+															<td style="padding: 14px; background: #F1F8E9; vertical-align: top;">
+																<strong>⚖️ Enfoque:</strong> Equilibrio flexible<br>
+																<strong>• Clave:</strong> Adherencia a largo plazo<br>
+																<strong>• Estrategias:</strong> Flexibilidad selectiva
+															</td>
+														</tr>
+
+														<!-- MIXTO/COMBINADO -->
+														<tr>
+															<td style="padding: 16px; font-weight: 600; color: #2E7D32; vertical-align: top;">
+																<strong>Plan mixto/combinado</strong>
+															</td>
+															<td style="padding: 14px; background: #F9F9F9; vertical-align: top;">
+																• <strong>Volumen:</strong> HC 40–50%, PT 25–30%<br>
+																• <strong>Definición:</strong> HC 10–25%, PT 25–35%<br>
+																• <strong>Mant.:</strong> HC 30–40%, PT 20–25%
+															</td>
+															<td style="padding: 14px; vertical-align: top;">
+																<strong>🔄 Enfoque:</strong> Periodización nutricional<br>
+																<strong>• Estrategias:</strong> CKD avanzado, fases carga-descarga
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+											<!-- Nota al final -->
+											<div class="p-3 bg-light" style="font-size: 0.95em; color: #555; border-top: 1px solid #eee;">
+												<p class="mb-0">
+													<strong>💡 Nota:</strong> Estas fases evolucionan con tu progreso. Ej: 
+													<strong>Inducción Cetogénica → Ciclado Metabólico → Mantenimiento</strong> 
+													para evitar el efecto rebote.
+												</p>
+											</div>
+										</div>
+
+										<!-- Footer -->
+										<div class="modal-footer" style="background: #f8f9fa;">
+											<button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Cerrar</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						<!-- Recuadro de recordatorio -->
+						<div style="
+							background-color: #FFF3E0; 
+							border: 1px solid #FFCC80;
+							border-radius: 8px;
+							padding: 14px 16px;
+							margin: 16px 0;
+							font-size: 0.95em;
+							line-height: 1.6;
+						">
+							<em>
+								<strong style="color: #468A45;">💡 Recuerda:</strong> 
+								las calorías definen la dirección, pero los macronutrientes determinan la <strong>calidad</strong> del cambio.
+							</em>
+							<br>
+							<em style="display: block; margin-top: 6px;">
+								Tu plan se adapta a ti. La nutrición inteligente combina ciencia, flexibilidad y sostenibilidad.
+							</em>
+						</div>
+
+
+
+                     <form id="macro-form">
+                        
+                            <div id="macro-percentage-inputs">
+								<label>Ajuste Final de Kcal segun Objetivo:</label>
+								<div class="input-group">
+									<div class="input-item">
+										<label for="get-calories">GET calculado (kcal):</label>
+										<input type="number" id="get-calories" name="goal-calories" required min="500" placeholder="Kcal calculadas" readonly>
+										<p class="percentage-info">Gasto Energético Total calculado</p>
+									</div>
+									
+									<div class="input-item">
+										<label for="goal-calories">Kcalorías/dia segun Objetivo
+											
+										</label>
+										<input type="number" id="goal-calories" name="goal-calories" required min="500" placeholder="Kcal/dia" readonly>
+										<p class="percentage-info">Ajuste según tu objetivo( 15% Perdida / 10% Ganancia)</p>
+									</div>
+									
+									<div class="input-item">
+										<label for="goal-caloriespc">% Perdida/Ganancia (kcal):</label>
+										<input type="number" id="goal-caloriespc" name="goal-caloriespc" required min="1" placeholder="Introduce el % deseado">
+										<p class="percentage-info">Ej: 10 para 10% de déficit o superávit</p>
+									</div>
+								</div>
+								
+								<h3>Distribución de Macronutrientes (% del total calórico):<h3>
+								
+								<div class="macro-visualization">
+									<div class="macro-bars">
+										<div class="protein-bar" style="width: 30%;"></div>
+										<div class="carbs-bar" style="width: 40%;"></div>
+										<div class="fat-bar" style="width: 30%;"></div>
+									</div>
+									
+									<div class="macro-labels">
+										<div class="macro-label protein-label">Proteína: 30%</div>
+										<div class="macro-label carbs-label">Carbohidratos: 40%</div>
+										<div class="macro-label fat-label">Grasas: 30%</div>
+									</div>
+								</div>
+								
+								<div class="total-display" id="macro-percentage-total">Total: 100%</div>
+								
+								
+								
+								<div class="input-group">
+									<div class="input-item">
+										<label for="protein-percentage">Proteína (%):</label>
+										<input type="number" id="protein-percentage" name="protein-percentage" value="30" min="10" max="50" step="1">
+										<p class="percentage-info">Recomendado: 25-35%</p>
+									</div>
+									
+									<div class="input-item">
+										<label for="carb-percentage">Carbohidratos (%):</label>
+										<input type="number" id="carb-percentage" name="carb-percentage" value="40" min="1" max="80" step="1">
+										<p class="percentage-info">Recomendado: 35-50%</p>
+									</div>
+									
+									<div class="input-item">
+										<label for="fat-percentage">Grasas (%):</label>
+										<input type="number" id="fat-percentage" name="fat-percentage" value="30" min="10" max="90" step="1">
+										<p class="percentage-info">Recomendado: 20-35%</p>
+									</div>
+								</div>
+								
+								
+								
+
+								<div id="chart-container">
+									<canvas id="macroChart"></canvas>
+								</div>
+								
+							</div>
+							
+                        <button type="submit" id="calculate-macros-button" >Calcular Gramos de Macronutrientes</button>
+						<a href="#"
+						   data-bs-toggle="modal"
+						   data-bs-target="#macroChartModal"
+						   class="target-icon-subtle"
+						   style="display: none;">
+						  <span class="icon">🎯</span>
+						  <span class="text">Ver gráfico</span>
+						</a>
+    
+                    </form>
+                    <div id="macro-result" style="display:none;">
+                        <p class="info-message">Completa los Pasos 2 y 3 para habilitar este cálculo.</p>
+                    </div>
+                    
+                </div>
+			</section>
+			<section>
+                <div class="plan-step" id="step-4">
+                     <h2>5. Genera tu Plan de Comidas Orientativo</h2>
+                     <p>Distribuye tus macronutrientes calculados en diferentes comidas a lo largo del día.</p>
+                     <form id="meal-form">
+                         <div id="meal-percentage-inputs">
+                             <label>Distribución de Calorías por Comida (% del total diario):</label>
+                             <div><label for="breakfast-perc">Desayuno:</label><input type="number" id="breakfast-perc" value="25" min="0" max="100" step="1"></div>
+                             <div><label for="snack1-perc">Media Mañana:</label><input type="number" id="snack1-perc" value="10" min="0" max="100" step="1"></div>
+                             <div><label for="lunch-perc">Almuerzo:</label><input type="number" id="lunch-perc" value="30" min="0" max="100" step="1"></div>
+                             <div><label for="snack2-perc">Merienda:</label><input type="number" id="snack2-perc" value="10" min="0" max="100" step="1"></div>
+                             <div><label for="dinner-perc">Cena:</label><input type="number" id="dinner-perc" value="25" min="0" max="100" step="1"></div>
+                             <p id="meal-percentage-total"></p>
+                         </div>
+                         <button type="submit" id="generate-meals-button" >Generar Distribución por Comida</button>
+                     </form>
+                     <div id="meal-result" style="display:none;">
+                         <p class="info-message">Completa el Paso 4 para habilitar este cálculo.</p>
+                     </div>
+                </div>
+			</section>
+                
+
+
+
+
+			
+		<section>
+			<div class="plan-step" id="step-4">
+					<h2>6.Planificación Diétetica</h2>
+					<p>La sección "Ciclos Dietéticos" te permite personalizar tu plan nutricional definiendo fases específicas (como Inducción Cetogénica, Volumen Muscular, Mantenimiento) y seleccionando estrategias dietéticas avanzadas (como Carb Cycling, Refeed, Ayuno Intermitente). Su propósito es adaptar tu ingesta a diferentes objetivos en distintos períodos, optimizando resultados como la pérdida de grasa, la ganancia muscular o el mantenimiento del peso, mientras se mejora la adherencia y se pueden sortear mesetas. Esta personalización se refleja en las tablas de planificación temporal detalladas que se generan posteriormente.</p>
+				</div>
+				<div class="text-center mb-4">
+					<button onclick="abrirModalMacros();" class="btn btn-primary btn-lg" aria-label="Ajustar y calcular macronutrientes" id="botonCalcular">
+						🧮 Calcular Planificación
+					</button>
+				</div>
+								<div class="card-body">
+								<!-- Selects de Fase (inicialmente ocultos) -->
+					                <label for="fasePerdida1" class="form-label" id="labelFasePerdida1" style="display:none;">Fase del Ciclo (Pérdida de Peso):</label>
+					                <select id="fasePerdida1" class="form-control" aria-label="Fase de pérdida de peso">
+										<option value="sel1">Selecciona Fase</option> 
+					                    <option value="induccion_cetogenica1">Inducción Cetogénica</option>
+					                    <option value="ciclado_metabolico1">Ciclado Metabólico</option>
+					                    <option value="transicion_mantenimiento1">Transición a Mantenimiento</option>
+					                </select>
+									 <label for="faseGanancia1" class="form-label" id="labelFaseGanancia1" style="display:none;">Fase del Ciclo (Ganancia de Peso):</label>
+					                <select id="faseGanancia1" class="form-control" aria-label="Fase de ganancia de peso">
+										<option value="sel2">Selecciona Fase</option> 
+					                    <option value="volumen1">Volumen Muscular</option>
+					                    <option value="masa1">Enfocado en Masa Muscular</option>
+					                </select>
+					
+					                <label for="enfoqueMantenimiento1" class="form-label" id="labelEnfoqueMantenimiento1" style="display:none;">Enfoque (Mantenimiento):</label>
+					                <select id="enfoqueMantenimiento1" class="form-control" aria-label="Enfoque de mantenimiento">
+										<option value="sel3">Selecciona Fase</option> 
+					                    <option value="equilibrio1">Equilibrio Flexible</option>
+					                    <option value="social1">Adherencia Social</option>
+					                </select>
+					
+					                <label for="faseMixto1" class="form-label" id="labelFaseMixto1" style="display:none;">Fase del Ciclo (Mixto/Combinado):</label>
+					                <select id="faseMixto1" class="form-control" aria-label="Fase de plan mixto">
+										<option value="sel4">Selecciona Fase</option> 
+					                    <option value="volumen1">Volumen</option>
+					                    <option value="definicion1">Definición</option>
+					                    <option value="mantenimiento1">Mantenimiento</option>
+					                </select>
+								</div>
+								
+					<!-- Nuevo card-body para Estrategias + Planificación -->			
+				<div class="card-body">
+				  <div class="row align-items-start">
+					<!-- Columna izquierda: Estrategias Especiales -->
+					<div class="col-md-6">
+					  <div id="opcionesPerdida1" class="mt-3">
+						<div class="row">
+						  <div class="col-md-12">
+						  <div class="card-header">
+							<h5>Estrategias Especiales:</h5>
+							</div>
+							<div class="strategy-checkboxes" id="opcionesPerdida1">
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ninguna" value="ninguna" checked>
+								<label class="form-check-label" for="estrategia_ninguna">Cetosis estricta (<50g HC/día)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_tkd" value="tkd">
+								<label class="form-check-label" for="estrategia_tkd">TKD (25-50g HC pre/post entreno)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ckd" value="ckd">
+								<label class="form-check-label" for="estrategia_ckd">CKD (2 días carb-loading 150-500g HC)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_if_16_8" value="if_16_8">
+								<label class="form-check-label" for="estrategia_if_16_8">IF 16:8 (Ventana de alimentación 8 horas)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_refeed" value="refeed">
+								<label class="form-check-label" for="estrategia_refeed">Refeed (1-2 días/semana HC alto)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_hiperproteica" value="hiperproteica">
+								<label class="form-check-label" for="estrategia_hiperproteica">Hiperproteica (1.8-2.5 g/kg peso proteína)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_carb_cycling" value="carb_cycling">
+								<label class="form-check-label" for="estrategia_carb_cycling">Carb Cycling (Días altos/bajos HC)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_protein_cycling" value="protein_cycling">
+								<label class="form-check-label" for="estrategia_protein_cycling">Protein Cycling (4 semanas altas + 1 baja proteína)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_timing" value="timing">
+								<label class="form-check-label" for="estrategia_timing">Timing Nutricional (HC post-entreno)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_flexible_dieting" value="flexible_dieting">
+								<label class="form-check-label" for="estrategia_flexible_dieting">Flexible Dieting (80/20 regla)</label>
+							  </div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					  <div id="opcionesGanancia1" class="mt-3" style="display:none;">
+						<div class="row">
+						  <div class="col-md-12">
+						  <div class="card-header">
+							<h5>Estrategias Especiales:</h5>
+							</div>
+							<div class="strategy-checkboxes" id="opcionesGanancia1">
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_ninguna" value="ninguna" checked>
+								<label class="form-check-label" for="estrategia_ganancia_ninguna">Ninguna (Balance HC/proteína)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_carb_cycling" value="carb_cycling">
+								<label class="form-check-label" for="estrategia_ganancia_carb_cycling">Carb Cycling (Días altos/moderados HC)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_refeed" value="refeed">
+								<label class="form-check-label" for="estrategia_ganancia_refeed">Refeed (Días altos HC semanales)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_timing" value="timing">
+								<label class="form-check-label" for="estrategia_ganancia_timing">Timing Nutricional (HC post-entreno)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_flexible_dieting" value="flexible_dieting">
+								<label class="form-check-label" for="estrategia_ganancia_flexible_dieting">Flexible Dieting (80/20 regla)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_ckd" value="ckd_ganancia">
+								<label class="form-check-label" for="estrategia_ganancia_ckd">CKD: 5+2 approach para optimizar glucógeno</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_timing_nutricional" value="timing_nutricional_ganancia">
+								<label class="form-check-label" for="estrategia_ganancia_timing_nutricional">Timing nutricional: Proteína post-entreno</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_ganancia_carb_loading" value="carb_loading_ganancia">
+								<label class="form-check-label" for="estrategia_ganancia_carb_loading">Carb-loading: Días previos a entrenos intensos</label>
+							  </div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					  <div id="opcionesMantenimiento1" class="mt-3" style="display:none;">
+						<div class="row">
+						  <div class="col-md-12">
+						  <div class="card-header">
+							<h5>Estrategias Especiales:</h5>
+							</div>
+							<div class="strategy-checkboxes" id="opcionesMantenimiento1">
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mantenimiento_ninguna" value="ninguna" checked>
+								<label class="form-check-label" for="estrategia_mantenimiento_ninguna">Ninguna (Equilibrio nutricional)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mantenimiento_flexible_dieting" value="flexible_dieting">
+								<label class="form-check-label" for="estrategia_mantenimiento_flexible_dieting">Flexible Dieting (80/20 regla)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mantenimiento_if_16_8" value="if_16_8">
+								<label class="form-check-label" for="estrategia_mantenimiento_if_16_8">IF 16:8 (Ventana de alimentación 8 horas)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mantenimiento_refeed" value="refeed">
+								<label class="form-check-label" for="estrategia_mantenimiento_refeed">Refeed (Días altos HC)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mantenimiento_carb_cycling" value="carb_cycling">
+								<label class="form-check-label" for="estrategia_mantenimiento_carb_cycling">Carb Cycling (Días altos/bajos HC)</label>
+							  </div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					  <div id="opcionesMixto1" class="mt-3" style="display:none;">
+						<div class="row">
+						  <div class="col-md-12">
+							<div class="card-header">
+							<h5>Estrategias Especiales:</h5>
+							</div>
+							<div class="strategy-checkboxes" id="opcionesMixto1">
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mixto_ninguna" value="ninguna" checked>
+								<label class="form-check-label" for="estrategia_mixto_ninguna">Ninguna (Balance nutricional)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mixto_carb_cycling" value="carb_cycling">
+								<label class="form-check-label" for="estrategia_mixto_carb_cycling">Carb Cycling (Días altos/bajos HC)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mixto_refeed" value="refeed">
+								<label class="form-check-label" for="estrategia_mixto_refeed">Refeed (Días altos HC)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mixto_flexible_dieting" value="flexible_dieting">
+								<label class="form-check-label" for="estrategia_mixto_flexible_dieting">Flexible Dieting (80/20 regla)</label>
+							  </div>
+							  <div class="form-check">
+								<input class="form-check-input" type="checkbox" id="estrategia_mixto_timing" value="timing">
+								<label class="form-check-label" for="estrategia_mixto_timing">Timing Nutricional (HC post-entreno)</label>
+							  </div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					<div class="text-center mb-6">
+						<br style="height: 30px; display: block; content: '';">
+						<button onclick="abrirModalMacros();" class="btn btn-primary btn-lg" aria-label="Ajustar y calcular macronutrientes" style="display: none;" id="calcularPlanificacionBtn">
+							🧮 Calcular Planificación
+						</button>
+					</div
+						
+			</div>
+					
+					<!-- Columna derecha: Planificación Temporal -->
+					<div class="col-md-6" id="planificacion-temporal" style="display:none;">
+					  <div class="card mb-3">
+						<div class="card-header">
+						  <h5>Planificación Temporal</h5>
+						</div>
+						<div class="card-body">
+						  <label for="periodoPlanificacion" class="form-label">Período de Planificación:</label>
+						  <select id="periodoPlanificacion" class="form-control" aria-label="Período de planificación">
+							<option value="semanal">Semanal (4 semanas)</option>
+							<option value="mensual">Mensual (12 semanas)</option>
+						  </select>
+						</div>
+					  </div>
+					  <<div id="resultados" class="card" style="display:none;">
+						<div class="card-header">
+						  <h5>📊 Resultados de tu Plan Nutricional</h5>
+						</div>
+						<div class="card-body">
+						  
+						  <ul class="list-unstyled">
+							<li><strong>GET:</strong> <span id="gastoEnergetico"></span> kcal/día</li>
+							<li><strong>Kcal/día Objetivo:</strong> <span id="calorias"></span> kcal</li>
+							<li><strong>PT:</strong> <span id="proteinas"></span>g (<span id="proteinasPct"></span>%)</li>
+							<li><strong>CH:</strong> <span id="carbohidratos"></span>g (<span id="carbohidratosPct"></span>%)</li>
+							<li><strong>GR:</strong> <span id="grasas"></span>g (<span id="grasasPct"></span>%)</li>
+						  </ul>
+						</div>
+					  </div>
+					</div>
+					
+				 
+				
+						<!---<div id="resultados" class="card" style="display:none;"> --->
+				  
+					  <div class="col-md-6" style='display:none';>
+								<canvas id="chartMacros" width="300" height="300" aria-label="Gráfico de distribución de macronutrientes"></canvas>
+					  </div>
+					  </div
+			
+					<div class="mt-3" style='display:none'>
+						<h6>📋 Recomendaciones Específicas</h6>
+						<div id="recomendaciones" class="alert alert-info"></div>
+					</div>
+				</div>
+				
+			</section>
+			
+			<section>			
+			<!-- Resultados y Planificación Temporal (HTML existente) -->
+			<div class="card">
+			<div class="mt-3" >
+			<div class="card-header d-flex justify-content-between align-items-start">
+				<!-- Texto (título + subtítulo) a la izquierda -->
+				<div class="d-flex flex-column">
+					<h2 class="mb-0">
+						<i class="fas fa-list-alt icono-fase"></i> Planificación General del Proceso
+					</h2>
+					<p class="mb-0 mt-1">
+						<small>Basada en tu objetivo y el tiempo estimado del Paso 3.</small>
+					</p>
+				</div>
+
+				<!-- Botón a la derecha -->
+				<button class="btn btn-sm btn-outline-secondary" id="btnColapsarTodo" >
+					<i class="fas fa-bars"></i> Colapsar Todo
+				</button>
+			</div>
+			
+			
+			
+			
+		<div class="card-body">
+			<!-- Sección para la Tabla General del Proceso -->
+			<div id="tablaGeneralProcesoContainer" class="card mb-4">
+				
+				
+				
+			</div>
+
+			<!-- Sección para la Tabla Específica (Planificación Temporal Original) -->
+			<div id="planificacionTemporal" class="card" style="display:none;">
+				<div class="card-header">
+					<h2>📅 Planificación Temporal Específica</h2> <!-- Título modificado para diferenciar -->
+					<p class="mb-0"><small>Basada en el período seleccionado (semanal/mensual).</small></p> <!-- Subtítulo añadido -->
+				<</div> 
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered" aria-label="Tabla de planificación nutricional">
+							<thead class="table-dark"> <!-- Añadido estilo de encabezado oscuro -->
+								<tr>
+									<th scope="col">Semana</th>
+									<th scope="col">Fase</th>
+									<th scope="col">Strategy</th>
+									<th scope="col">Kcal</th>
+									<th scope="col">PT (%)</th>
+									<th scope="col">CH (%)</th>
+									<th scope="col">GR (%)</th>
+									<th scope="col">PT (g)</th>
+									<th scope="col">CH (g)</th>
+									<th scope="col">GR (g)</th>
+									<th scope="col">AF/sem</th>
+									<th scope="col">Notas</th>
+								</tr>
+							</thead>
+							<tbody id="tablaPlanificacionBody"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Contenedor para la Tabla Detallada de Fase Seleccionada -->
+			<div id="tablaDetalladaFaseContainer" class="mt-4 card" style="display:none;"> <!-- Añadido estilo de tarjeta y oculto por defecto -->
+				<div class="card-header">
+					<h5>🔍 Detalles de la Fase Seleccionada</h5> <!-- Título del contenedor -->
+					<p class="mb-0"><small>Desglose semanal detallado basado en la fase general.</small></p> <!-- Subtítulo -->
+					<p class="info-message">Selecciona una fase en la "Planificación General del Proceso" para ver su desglose semanal detallado.</p>
+				</div>
+				<div class="card-body">
+					<!-- El contenido de la tabla detallada se generará aquí -->
+					
+				</div>
+			</div>
+		</div>
+	</section>
+		
+			<section>
+                <h2>7. Tabla de Ciclos y Breaks (Automática)</h2>
+                    <p>Esta tabla muestra una estructura detallada y orientativa de ciclos de carga-descarga proteica, incluyendo fases de déficit o superávit y descansos (breaks) a mantenimiento. Los valores se basan en los cálculos automáticos de los Pasos 1, 2 y 3.</p>
+                    <div id="step-5-results"> <div id="detailed-cycle-table-container"></div>   
+                    </div>
+			</section>	
+			
+		    <section>
+					<h2>8. Tabla de Ciclos Hiperproteicos (Manual)</h2>
+                    <p>Esta tabla organiza ciclos hiperproteicos (Consumo alto, entre 30-40%) y breaks (Consumo moderado, entre 15-25%), cuya duración se basa en la estimación temporal manual del Paso 6. La cantidad de proteína objetivo para cada fase se calcula aplicando porcentajes específicos sobre las Kcal/día asignadas (un porcentaje más alto para la fase hiperproteica (35%) y uno más bajo para la fase de break(20%)).".</p>
+					<p>la velocidad de perdida indicada en kg/semana está basada en el ajuste constante de deficit calorico semanal, señalado en el paso 6. Para la fase hiperproteica se mantiene ese ritmo de perdida semanal y se reduduce a la mitad en la fase de Descanso. El progreso real puede variar.</p>
+                    <div id="hyperprotein-cycle-table-container">
+                        
+                        <table id="hyperprotein-cycle-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Ciclo</th>
+                                    <th>Fase</th>
+                                    <th>Semanas</th>
+                                    <th>Peso (kg) <br>(Inicio → Fin)</th>
+									<th>Kcal/día/AF</th>
+                                    <th>Proteínas (g/kg)</th>
+                                    <th>Notas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hyperprotein-cycle-table-body">
+                                </tbody>
+                        </table>
+                        <div id="hyperprotein-note-container"></div> </div>
+						
+						<div class="text-center mb-4">
+                     <button id="generate-hyperprotein-button" onclick="generateHyperproteinCycles()" style="margin-top: 15px;" >
+                        Generar Tabla de Ciclos Hiperproteicos (Manual)
+                    </button>
+					</div>
+						
+						<div><button id="save-pdf-button" style="margin-top: 30px; background-color: #0275d8; width: auto; padding: 12px 25px; display: block; margin-left: auto; margin-right: auto;" >Guardar Plan como PDF</button></div>
+					
+					
+				</div>
+								
+					
+					
+				
+		</section>
+
+						<!-- SECCION MODALS-->		
+						<!-- Modal para ajuste manual de macros -->
+						<div class="modal fade" id="modalMacros" tabindex="-1" aria-labelledby="modalMacrosLabel" aria-hidden="true">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="modalMacrosLabel">Ajuste de Macronutrientes</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<p><strong>Objetivo:</strong> <span id="modal-objetivo">No seleccionado</span></p>
+										<p><strong>Fase:</strong> <span id="modal-fase">No seleccionada</span></p>
+
+										<div id="modal-warning" class="alert alert-warning" style="display:none;">
+											Por favor, selecciona primero un objetivo y una fase.
+										</div>
+
+										<div id="modal-content" style="display:none;">
+											<p>Arrastra los controles para ajustar los porcentajes. Recomendamos valores cercanos al rango óptimo para tu fase.</p>
+
+											<div class="mb-3">
+												<label for="proteinasRange">Proteínas <span id="proteinasValue">25</span>%</label>
+												<input type="range" class="form-range" id="proteinasRange" min="10" max="50" value="25">
+												<small>Rango recomendado: <span id="proteinasRango">20-30%</span></small>
+											</div>
+
+											<div class="mb-3">
+												<label for="carbohidratosRange">Carbohidratos <span id="carbohidratosValue">40</span>%</label>
+												<input type="range" class="form-range" id="carbohidratosRange" min="5" max="70" value="40">
+												<small>Rango recomendado: <span id="carbohidratosRango">10-50%</span></small>
+											</div>
+
+											<div class="mb-3">
+												<label for="grasasRange">Grasas <span id="grasasValue">35</span>%</label>
+												<input type="range" class="form-range" id="grasasRange" min="15" max="100" value="35">
+												<small>Rango recomendado: <span id="grasasRango">25-70%</span></small>
+											</div>
+
+											<div class="alert alert-info">
+												<strong>Consejo:</strong> <span id="modal-consejo">Selecciona una fase para ver recomendaciones.</span>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+										<button type="button" class="btn btn-primary" id="guardarMacros">Guardar y Calcular</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal para Incompatibilidad de Estrategias -->
+							<div id="modalIncompatibilidad" class="modal" tabindex="-1" role="dialog" style="display: none;">
+							  <div class="modal-dialog modal-lg" role="document"> <!-- modal-lg para más espacio -->
+								<div class="modal-content">
+								  <div class="modal-header">
+									<h5 class="modal-title">⚠️ Estrategias Incompatibles Seleccionadas</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" onclick="cerrarModal('modalIncompatibilidad')"></button>
+								  </div>
+								  <div class="modal-body">
+									<p id="mensajeIncompatibilidad">
+									  <!-- El mensaje se llenará dinámicamente -->
+									</p>
+									<hr>
+									<h6>Guía de Compatibilidad Sugerida:</h6>
+									<div id="guiaCompatibilidad">
+										<!-- La guía se llenará dinámicamente -->
+									</div>
+									<hr>
+									<p><strong>¿Quieres definir manualmente los macronutrientes para tus estrategias?</strong></p>
+									<p>Puedes hacerlo pulsando el botón de abajo. Esto te permitirá personalizar los valores incluso si las estrategias iniciales son incompatibles según nuestra lógica automática.</p>
+								  </div>
+								  <div class="modal-footer">
+									<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalIncompatibilidad')">Aceptar y Corregir</button>
+									<button type="button" class="btn btn-primary" onclick="abrirModalConfiguracionManual()">Configurar Macros Manualmente</button>
+									<!-- Botón oculto por ahora, se puede activar si se implementa "Forzar Combinación"
+									<button type="button" class="btn btn-warning" style="display:none;">Forzar Combinación (Avanzado)</button>
+									-->
+								  </div>
+								</div>
+							  </div>
+							</div>
+
+							<!-- Modal para Configuración Manual de Macronutrientes -->
+							<div id="modalConfiguracionManual" class="modal" tabindex="-1" role="dialog" style="display: none;">
+							  <div class="modal-dialog modal-xl" role="document"> <!-- modal-xl para mucho contenido -->
+								<div class="modal-content">
+								  <div class="modal-header">
+									<h5 class="modal-title">⚙️ Configuración Manual de Macronutrientes por Fase</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" onclick="cerrarModal('modalConfiguracionManual')"></button>
+								  </div>
+								  <div class="modal-body">
+									<p>Define los porcentajes de macronutrientes para tus estrategias seleccionadas. <strong>La suma debe ser 100% para cada estrategia.</strong></p>
+									<form id="formConfiguracionManual">
+										<div id="contenedorEntradasManuales">
+											<!-- Los bloques de entrada se generarán aquí dinámicamente -->
+											<!-- Ejemplo de bloque (se generará por JS):
+											<div class="bloque-estrategia-manual mb-3 p-3 border rounded" data-estrategia="nombre_estrategia">
+												<h6>Estrategia: <span class="nombre-estrategia">nombre_estrategia</span></h6>
+												<div class="row">
+													<div class="col-md-4">
+														<label for="manual_proteina_nombre_estrategia" class="form-label">Proteína (%)</label>
+														<input type="number" class="form-control input-macro-manual" id="manual_proteina_nombre_estrategia" name="manual_proteina_nombre_estrategia" min="0" max="100" value="25" required>
+													</div>
+													<div class="col-md-4">
+														<label for="manual_carbohidratos_nombre_estrategia" class="form-label">Carbohidratos (%)</label>
+														<input type="number" class="form-control input-macro-manual" id="manual_carbohidratos_nombre_estrategia" name="manual_carbohidratos_nombre_estrategia" min="0" max="100" value="40" required>
+													</div>
+													<div class="col-md-4">
+														<label for="manual_grasas_nombre_estrategia" class="form-label">Grasas (%)</label>
+														<input type="number" class="form-control input-macro-manual" id="manual_grasas_nombre_estrategia" name="manual_grasas_nombre_estrategia" min="0" max="100" value="35" required>
+													</div>
+												</div>
+												<div class="total-macro-manual mt-2">
+													<strong>Total: <span class="valor-total">100</span>%</strong>
+													<span class="estado-total text-success" style="display:none;">✓ Correcto</span>
+													<span class="estado-total text-danger" style="display:none;">✗ Debe ser 100%</span>
+												</div>
+											</div>
+										
+										</div>
+									</form>
+									<div id="errorConfiguracionManual" class="alert alert-danger mt-3" style="display: none;">
+										<!-- Mensajes de error específicos se mostrarán aquí -->
+									</div>
+										<div id="opcionesRecomposicion" class="mb-3">
+											<label class="form-label"><strong>Días de entrenamiento:</strong></label><br>
+											<input type="checkbox" id="training-day-Lunes" value="Lunes" checked> Lunes
+											<input type="checkbox" id="training-day-Martes" value="Martes"> Martes
+											<input type="checkbox" id="training-day-Miércoles" value="Miércoles" checked> Miércoles
+											<input type="checkbox" id="training-day-Jueves" value="Jueves"> Jueves
+											<input type="checkbox" id="training-day-Viernes" value="Viernes" checked> Viernes
+											<input type="checkbox" id="training-day-Sábado" value="Sábado"> Sábado
+											<input type="checkbox" id="training-day-Domingo" value="Domingo"> Domingo
+										</div>
+								  </div>
+								  <div class="modal-footer">
+									<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfiguracionManual')">Cancelar</button>
+									<button type="button" class="btn btn-success" onclick="aplicarConfiguracionManual()">Aplicar y Calcular</button>
+								  </div>
+								</div>
+							  </div>
+							</div>
+
+							<div class="modal fade" id="macroChartModal" tabindex="-1" aria-labelledby="macroChartModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="macroChartModalLabel">Distribución de Macronutrientes</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<div id="modal-chart-container" style="height: 400px;">
+												<canvas id="macroChartModalCanvas"></canvas>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Modal con estilo verde -->
+							
+	<!-- Modal de la Calculadora No Lineal -->
+	<div class="modal fade" id="modalCalculadoraNoLineal" tabindex="-1" aria-labelledby="modalCalculadoraNoLinealLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<!-- Header del modal -->
+				<div class="modal-header" style="background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%); color: white;">
+					<h5 class="modal-title" id="modalCalculadoraNoLinealLabel">📊 Calculadora No Lineal de Progreso Corporal</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+				<!-- Body del modal -->
+				<div class="modal-body">
+					<p class="text-center mb-3 opacity-75">Modelo MEPNL v2.1 - Cálculo realista de tiempo y progreso</p>
+					
+					<!-- Formulario de entrada -->
+					<div class="card form-card mb-4">
+						<div class="card-body">
+							<h5 class="mb-3">⚙️ Parámetros de Entrada</h5>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="form-label">Objetivo de peso (kg)</label>
+										<input type="number" class="form-control" id="weightGoalModal" value="-5" step="0.1">
+										<div class="form-text">Negativo para pérdida, positivo para ganancia</div>
+									</div>
+									<div class="mb-3">
+										<label class="form-label">Déficit/Superávit semanal (kcal)</label>
+										<input type="number" class="form-control" id="weeklyCalorieDiffModal" value="-3500">
+									</div>
+									<div class="mb-3">
+										<label class="form-label">Peso actual (kg)</label>
+										<input type="number" class="form-control" id="currentWeightModal" value="70" step="0.1">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="form-label">Género</label>
+										<select class="form-select" id="userGenderModal">
+											<option value="male">Hombre</option>
+											<option value="female" selected>Mujer</option>
+										</select>
+									</div>
+									<div class="mb-3">
+										<label class="form-label">Edad</label>
+										<input type="number" class="form-control" id="userAgeModal" value="35">
+									</div>
+									<div class="mb-3">
+										<label class="form-label">% Grasa corporal</label>
+										<input type="number" class="form-control" id="currentFatPercModal" value="28" step="0.1">
+									</div>
+									<div class="mb-3">
+										<label class="form-label">Nivel de actividad</label>
+										<select class="form-select" id="activityLevelModal">
+											<option value="sedentario">Sedentario</option>
+											<option value="leve" selected>Leve</option>
+											<option value="moderate">Moderado</option>
+											<option value="active">Activo</option>
+											<option value="very-active">Muy activo</option>
+										</select>
+									</div>
+									<div class="form-check mb-3">
+										<input class="form-check-input" type="checkbox" id="isAthleteModal">
+										<label class="form-check-label">¿Eres deportista/atleta?</label>
+									</div>
+								</div>
+							</div>
+							<div class="text-center">
+								<button onclick="guardarYCalcularModal(event)">Calcular progreso</button>
+							</div>
+						</div>
+					</div>
+
+					
+
+					
+				
+					<!-- Footer del modal -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal para mostrar la tabla de progreso -->
+<div class="modal fade" id="modalTablaProgreso" tabindex="-1" aria-labelledby="modalTablaProgresoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      
+      <!-- Header -->
+      <div class="modal-header" style="background: linear-gradient(135deg, #568a3d 0%, #3c9141 100%); color: white;">
+        <h5 class="modal-title" id="modalTablaProgresoLabel">📈 Progreso Semanal Detallado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        
+         <h3 class="text-center" style="font-family: 'Roboto', sans-serif;">
+			<strong>Evolución estimada semana a semana basada en el modelo MEPNL v2.1</strong>
+		</h3>
+
+        <!-- Contenedor de Resultados -->
+        <div class="border rounded p-4 mb-4 bg-light" style="font-size: 0.95rem;">
+          <h3 class="text-success mb-3"><i class="bi bi-clipboard2-check"></i> Resultados del Análisis</h3>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <h4 class="text-secondary">📌 Resumen del Plan</h4>
+              <p id="resumen-plan-modal" class="mb-0 text-dark"></p>
+            </div>
+
+            <div class="col-12">
+              <h4 class="text-secondary">⚡ Velocidad de Cambio</h4>
+              <p id="resumen-velocidad-modal" class="mb-0 text-dark"></p>
+            </div>
+          </div>
+        </div>
+        <!-- Fin del contenedor de Resultados -->
+
+        <!-- Contenedor de la tabla -->
+        <div id="tabla-progreso-container-modal">
+          <div class="alert alert-info text-center">
+            <p>Calculando progreso... este contenedor se llenará automáticamente.</p>
+          </div>
+        </div>
+
+      </div> <!-- Fin del modal-body -->
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="exportarTablaProgreso()">
+          Exportar Tabla
+        </button>
+      </div>
+
+    </div> <!-- Fin del modal-content -->
+  </div> <!-- Fin del modal-dialog -->
+</div> <!-- Fin del modal -->
+		
+		
+		
+		
+   
+    
+
+<!-- Modal para Editar Fila -->
+<!-- Modal para Editar Fila -->
+<div class="modal fade" id="editarFilaModal" tabindex="-1" aria-labelledby="editarFilaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <!-- Cabecera del Modal -->
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="editarFilaModalLabel">
+          <!-- Cabecera dinámica: "Fase X: Nombre de la Fase, Día de la Semana" -->
+          <span id="modalTituloDia">Editar Día</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- Cuerpo del Modal -->
+      <div class="modal-body">
+        
+        <!-- Sección 1: Contexto del Plan -->
+       <!-- Sección 1: Contexto del Plan -->
+		<div class="mb-4 p-3 bg-light rounded">
+		  <h6 class="text-success">📋 Contexto del Plan</h6>
+		  <div class="row small g-2">
+			<div class="col-md-6">
+			  <ul class="mb-0" id="modalListaContextoIzquierda">
+				<!-- Elementos de lista dinámicos -->
+				<li><strong>Fase:</strong> <span id="modalInfoFase">...</span></li>
+				<li><strong>Objetivo:</strong> <span id="modalInfoObjetivo">...</span></li>
+				<li><strong>Duración Estimada:</strong> <span id="modalInfoDuracion">...</span></li>
+				<li><strong>Nº Semanas Fase:</strong> <span id="modalInfoSemanasFase">...</span></li>
+				<li><strong>Nº Días Transcurridos:</strong> <span id="modalInfoDiasTranscurridos">...</span></li>
+			  </ul>
+			</div>
+			<div class="col-md-6">
+			  <ul class="mb-0" id="modalListaContextoDerecha">
+				<!-- Elementos de lista dinámicos -->
+				<li><strong>Peso Perdido:</strong> <span id="modalInfoPesoPerdido">...</span></li>
+				<li><strong>Velocidad de Pérdida:</strong> <span id="modalInfoVelocidadPerdida">...</span></li>
+				<li><strong>Peso Inicial Fase:</strong> <span id="modalInfoPesoInicialFase">...</span></li>
+				<li><strong>Peso Actual Estimado:</strong> <span id="modalInfoPesoActualEstimado">...</span></li>
+				<li><strong>Peso Final Estimado:</strong> <span id="modalInfoPesoFinalEstimado">...</span></li>
+			  </ul>
+			</div>
+		  </div>
+		</div>
+
+        <!-- Sección 2: Posibles Estrategias por Objetivo -->
+        <div class="mb-4">
+          <h6 class="text-success">🧠 Posibles Estrategias por Objetivo</h6>
+          <div class="small mb-3">
+            <p class="mb-1"><strong>Estrategia Base Actual:</strong> <span id="modalEstrategiaBaseActual">...</span></p>
+            <p class="mb-1"><strong>Estrategias Base:</strong> <span id="modalEstrategiasBase">...</span></p>
+            <p class="mb-1"><strong>Recomendadas:</strong> <span id="modalEstrategiasRecomendadas">...</span></p>
+            <p class="mb-0 text-muted"><em>Límite: 3 estrategias específicas por día.</em></p>
+          </div>
+
+          <!-- Sección: Seleccionar Estrategias Específicas -->
+          <div class="mb-3">
+            <h6 class="text-success">✅ Seleccionar Estrategias Específicas</h6>
+            <!-- Contenedor para los checkboxes generados dinámicamente -->
+            <div id="modalCheckboxesEstrategias" class="mb-2">
+              <p class="text-muted small">Estrategias disponibles se cargarán aquí.</p>
+            </div>
+            <div class="alert alert-info small py-2" role="alert">
+              <i class="fas fa-info-circle"></i> Marca las estrategias que deseas aplicar para este día.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 3: Nivel de Actividad -->
+        <div class="mb-4">
+          <h6 class="text-success">🏃‍♂️ Nivel de Actividad</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="modalSelectActividad" class="form-label small">Selecciona tu nivel de actividad física diaria</label>
+              <select class="form-select form-select-sm" id="modalSelectActividad" aria-label="Seleccionar actividad">
+                <option value="1.2">Sedentario</option>
+                <option value="1.375">Ligero (1-3 días/semana)</option>
+                <option value="1.55">Moderado (3-5 días/semana)</option>
+                <option value="1.725">Activo (6-7 días/semana)</option>
+                <option value="1.9">Muy Activo (Intenso/Diario)</option>
+              </select>
+              <div class="form-text small text-muted">Este valor se usará para recalcular las calorías diarias estimadas (TDEE).</div>
+            </div>
+            <div class="col-md-3">
+              <label for="modalInputVelocidadPerdida" class="form-label small">Velocidad de Pérdida (kg/semana)</label>
+              <input type="number" class="form-control form-control-sm" id="modalInputVelocidadPerdida" step="0.01" min="0.01" max="1.0" placeholder="Ej: 0.28">
+              <div class="form-text small text-muted">Ajusta la velocidad de cambio de peso semanal.</div>
+            </div>
+            <div class="col-md-3">
+              <label for="modalInputMacrosGenerales" class="form-label small">% Macros Generales (Pt, CH, GR)</label>
+              <input type="text" class="form-control form-control-sm" id="modalInputMacrosGenerales" placeholder="Ej: 25, 5, 70">
+              <div class="form-text small text-muted">Distribución base de macros para la fase.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 4: Configurar Macros por Estrategia -->
+        <div class="mb-4">
+          <h6 class="text-success">⚙️ Configurar Macros por Estrategia</h6>
+          <p class="small text-muted mb-2">Selecciona los porcentajes de macros para cada estrategia aplicada.</p>
+          
+          <!-- Contenedor para las filas de configuración de macros generadas dinámicamente -->
+          <div id="modalConfiguracionMacrosPorEstrategia">
+            <!-- Las filas se generarán aquí dinámicamente cuando se marquen checkboxes -->
+          </div>
+          
+          <!-- Mensaje cuando no hay estrategias seleccionadas -->
+          <div id="modalMensajeSinEstrategias" class="text-center text-muted fst-italic small" style="display: block;">
+            Selecciona una estrategia para configurar sus macros.
+          </div>
+        </div>
+
+        <!-- Sección 5: Recordatorio de la Evolución -->
+        <div class="mb-3">
+          <h6 class="text-success">📊 Recordatorio de la Evolución</h6>
+          
+          <!-- Información de Fase, Semana y Día -->
+          <div class="row mb-3 small g-2">
+            <div class="col-md-4">
+              <div class="bg-primary text-white p-2 rounded text-center">
+                <strong>Fase Actual:</strong><br>
+                <span id="modalFaseActual">...</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-warning text-dark p-2 rounded text-center">
+                <strong>Semana:</strong> <span id="modalSemanaActual">...</span> de <span id="modalTotalSemanas">...</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-success text-white p-2 rounded text-center">
+                <strong>Día:</strong> <span id="modalDiaActual">...</span> (<span id="modalDiasRestantesFase">...</span> días restantes)
+              </div>
+            </div>
+          </div>
+			
+          <!-- Cronograma Dinámico de Fases -->
+          <div class="mb-3">
+            <h6 class="text-success small">📅 Cronograma Dinámico de Fases</h6>
+            <div id="modalCronogramaDinamico">
+              <!-- Aquí se generarán las barras de progreso dinámicamente -->
+              <div class="progress mb-1">
+                <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                  Cargando cronograma...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progreso Estimado de la Fase -->
+			<div class="mb-3">
+			  <h6 class="text-success small">📈 Progreso Estimado de la Fase</h6>
+			  <div id="modalGraficoProgreso" class="mb-2">
+				<!-- Aquí se generará el gráfico de progreso dinámicamente -->
+				
+				<!-- Información de Peso Inicial, Actual y Meta -->
+				<div class="row g-1 mb-1">
+				  <div class="col-4 text-center">
+					<div class="bg-info text-white p-1 rounded small">Inicio: <span id="modalPesoInicioGrafico">...</span>kg</div>
+				  </div>
+				  <div class="col-4 text-center">
+					<div class="bg-success text-white p-1 rounded small">Actual: <span id="modalPesoActualGrafico">...</span>kg</div>
+				  </div>
+				  <div class="col-4 text-center">
+					<div class="bg-warning text-dark p-1 rounded small">Meta: <span id="modalPesoMetaGrafico">...</span>kg</div>
+				  </div>
+				</div>
+
+				<!-- Barra de Progreso General -->
+				<div class="progress mb-2">
+				  <div class="progress-bar bg-info" role="progressbar" id="modalBarraProgresoGeneral" 
+					   style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+					Progreso general hacia el objetivo
+				  </div>
+				</div>
+
+				<!-- (Nuevo) Contenedor para el Gráfico Detallado de Línea de Tiempo -->
+				<div id="modalContenedorGraficoDetallado" class="mt-2 p-2 border rounded bg-light">
+				  <canvas id="modalCanvasGraficoDetallado" width="400" height="150"></canvas>
+				  <div id="modalLeyendaGraficoDetallado" class="small mt-1"></div>
+				</div>
+				<!-- (Fin de Nuevo) -->
+
+			  </div>
+			</div>
+
+          <!-- Próxima Reevaluación -->
+          <div class="alert alert-warning small py-2" id="modalAlertaProximaReevaluacion">
+            <strong>Próxima Reevaluación:</strong> <span id="modalProximaReevaluacion">Cargando...</span>
+		</div>
+			<div class="alert alert-warning small py-2" id="modalAlertaProximaReevaluacion">
+            <strong>Próximo Cambio de Fase:</strong> <span id="modalInfoCambioFase">Cargando...</span>
+		
+		
+			
+			
+			
+			
+          </div>
+        </div>
+      </div> <!-- Fin modal-body -->
+
+      <!-- Pie del Modal -->
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i> Cancelar
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary">
+          <i class="fas fa-print me-1"></i> Imprimir Plan
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" id="modalBotonAplicar">
+          <i class="fas fa-save me-1"></i> Aplicar Cambios
+        </button>
+      </div>
+    </div> <!-- Fin modal-content -->
+  </div> <!-- Fin modal-dialog -->
+</div> <!-- Fin modal -->
+
+
+
+		<!-- Modal de edición de estrategias -->
+<!-- Modal de edición de estrategias -->
+		<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+		  <div class="modal-dialog modal-xl">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title">
+				  <i class="fas fa-edit"></i> 
+				  <span id="modal-phase-title">Configuración de Estrategias</span>
+				</h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			  </div>
+			  <div class="modal-body p-4">
+				<div class="row">
+				  <!-- COLUMNA IZQUIERDA -->
+				  <!-- COLUMNA IZQUIERDA -->
+		<div class="col-md-6 border-end">
+		  <!-- Sección de estrategia base -->
+		  <div class="phase-config-section mb-4">
+			<h5><i class="fas fa-home me-2" style="color: #5e9a4f;"></i> Estrategia Base Fase nº </h5>
+			<p>Selecciona una estrategia base para esta fase:</p>
+			<div class="radio-group" id="base-strategies">
+			  <!-- Las opciones se generarán dinámicamente -->
+			</div>
+		  </div>
+		  
+		  <!-- Estrategias específicas con acordeones -->
+		  <div class="phase-config-section">
+			<h5><i class="fas fa-star me-2" style="color: #5e9a4f;"></i> Estrategias Específicas</h5>
+			<p class="text-muted">Selecciona las estrategias avanzadas que deseas aplicar:</p>
+			
+			<!-- Acordeón para Estrategias Cetogénicas Avanzadas -->
+			<div class="accordion mb-3" id="accordionCetogenicas">
+			  <div class="accordion-item">
+				<h2 class="accordion-header">
+				  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCetogenicas" aria-expanded="false" aria-controls="collapseCetogenicas">
+					<i class="fas fa-bacon me-2" style="color: #5e9a4f;"></i> Estrategias Cetogénicas
+				  </button>
+				</h2>
+				<div id="collapseCetogenicas" class="accordion-collapse collapse" data-bs-parent="#accordionCetogenicas">
+				  <div class="accordion-body" id="cetogenicas-strategies">
+					<!-- Aquí se renderizarán las estrategias cetogénicas -->
+				  </div>
+				</div>
+			  </div>
+			</div>
+			
+			<!-- Acordeón para Estrategias de Ciclado -->
+			<div class="accordion mb-3" id="accordionCiclado">
+			  <div class="accordion-item">
+				<h2 class="accordion-header">
+				  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCiclado" aria-expanded="false" aria-controls="collapseCiclado">
+					<i class="fas fa-sync-alt me-2" style="color: #5e9a4f;"></i> Estrategias de Ciclado
+				  </button>
+				</h2>
+				<div id="collapseCiclado" class="accordion-collapse collapse" data-bs-parent="#accordionCiclado">
+				  <div class="accordion-body" id="ciclado-strategies">
+					<!-- Aquí se renderizarán las estrategias de ciclado -->
+				  </div>
+				</div>
+			  </div>
+			</div>
+			
+			<!-- Acordeón para Estrategias de Timing -->
+			<div class="accordion mb-3" id="accordionTiming">
+			  <div class="accordion-item">
+				<h2 class="accordion-header">
+				  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTiming" aria-expanded="false" aria-controls="collapseTiming">
+					<i class="fas fa-clock me-2" style="color: #5e9a4f;"></i> Estrategias de Timing
+				  </button>
+				</h2>
+				<div id="collapseTiming" class="accordion-collapse collapse" data-bs-parent="#accordionTiming">
+				  <div class="accordion-body" id="timing-strategies">
+					<!-- Aquí se renderizarán las estrategias de timing -->
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  
+		  <!-- Recomendaciones Clave -->
+		  <div class="phase-config-section">
+			<h4><i class="fas fa-key me-2" style="color: #5e9a4f;"></i> Recomendaciones Clave</h4>
+			<div id="recommendations-container">
+			  <!-- Aquí se renderizarán las recomendaciones clave -->
+			</div>
+		  </div>
+		  
+		  <!-- NUEVO: Estrategia Óptima - CORRECTAMENTE IMPLEMENTADO -->
+		  <div class="phase-config-section">
+			<h4><i class="fas fa-chart-line me-2" style="color: #5e9a4f;"></i> Estrategia Óptima</h4>
+			<div id="optimal-strategy-content">
+			  <!-- Aquí se cargará dinámicamente la estrategia óptima -->
+			</div>
+		  </div>
+		</div>
+		  
+
+          <!-- COLUMNA DERECHA -->
+          <div class="col-md-6">
+            <!-- Configuración de macros -->
+            <div class="phase-config-section mb-4" id="macro-config-section">
+              <h5 class="mb-3"><i class="fas fa-sliders-h"></i> Configuración de Macros</h5>
+              <div class="text-muted mb-3">Los valores se actualizarán automáticamente al seleccionar una estrategia base</div>
+              
+              <!-- Formulario de peso y macros -->
+              <div class="form-group mb-3">
+                <label for="user-weight" class="form-label">Peso del usuario Inicio Fase nº </label>
+                <input type="number" id="user-weight" class="form-control" min="40" max="200" step="0.5">
+              </div>
+              
+              <div class="macro-config">
+                <div class="macro-input">
+                  <label>% Proteínas</label>
+                  <input type="number" id="proteinas-pct" value="30" step="1" min="15" max="35">
+                  <div class="macro-values" id="proteinas-gr">2.35 g/kg (185g)</div>
+                </div>
+                <div class="macro-input">
+                  <label>% Grasas</label>
+                  <input type="number" id="grasa-pct" value="40" step="1" min="15" max="75">
+                  <div class="macro-values" id="grasa-gr">3.13 g/kg (247g)</div>
+                </div>
+                <div class="macro-input">
+                  <label>% HC</label>
+                  <input type="number" id="hc-pct" value="30" step="1" min="5" max="70">
+                  <div class="macro-values" id="hc-gr">3.13 g/kg (247g)</div>
+                </div>
+              </div>
+              <div class="form-group mb-3">
+                <label>Suma de porcentajes</label>
+                <div class="d-flex align-items-center">
+                  <span id="macros-total" class="badge bg-success">100</span>
+                  <small class="ms-2 text-muted">Debe sumar 100% para ser válido</small>
+                </div>
+                <div id="macro-warnings" class="text-warning mt-2" style="display: none;"></div>
+              </div>
+              
+              <!-- ✅ Nuevo: Contenedor propio para los detalles -->
+              <div class="strategy-details-card mt-4">
+                <h6>
+                  <i class="fas fa-info-circle me-2" style="color: #5e9a4f;"></i>
+                  Detalles de la Estrategia Seleccionada
+                </h6>
+                <p id="macro-details-text" class="mb-0 text-muted" style="font-size: 0.95rem; line-height: 1.5;">
+                  Selecciona una estrategia base para ver los detalles.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Configuración de entrenamiento -->
+            <div class="training-config mb-4">
+              <h5 class="mb-3"><i class="fas fa-dumbbell"></i> Configuración de Entrenamiento</h5>
+              
+              <div class="mb-3">
+                <label class="form-label">Días de entrenamiento habituales</label>
+                <div class="days-selector" id="training-days">
+                  <div class="day-option" data-day="mon">Lun</div>
+                  <div class="day-option" data-day="tue">Mar</div>
+                  <div class="day-option" data-day="wed">Mié</div>
+                  <div class="day-option" data-day="thu">Jue</div>
+                  <div class="day-option" data-day="fri">Vie</div>
+                  <div class="day-option" data-day="sat">Sáb</div>
+                  <div class="day-option" data-day="sun">Dom</div>
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <label class="form-label">Intensidad en días de descanso</label>
+                <div class="intensity-selector">
+                  <div class="intensity-option" data-intensity="rest">Reposo</div>
+                  <div class="intensity-option" data-intensity="leve">Leve</div>
+                  <div class="intensity-option" data-intensity="moderada">Moderada</div>
+                   <!--<div class="intensity-option" data-intensity="intensa">Intensa</div> -->
+                </div>
+              </div>
+              
+              <div class="schedule-preview">
+                <h6><i class="fas fa-calendar-check"></i> Vista Previa de la Semana</h6>
+                <div class="schedule-days" id="schedule-preview">
+                  <div class="schedule-day training">Lun<br><small>Entreno</small></div>
+                  <div class="schedule-day training">Mar<br><small>Entreno</small></div>
+                  <div class="schedule-day rest">Mié<br><small>Descanso</small></div>
+                  <div class="schedule-day training">Jue<br><small>Entreno</small></div>
+                  <div class="schedule-day training">Vie<br><small>Entreno</small></div>
+                  <div class="schedule-day rest">Sáb<br><small>Descanso</small></div>
+                  <div class="schedule-day rest">Dom<br><small>Descanso</small></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Configuración de pausas y reevaluaciones -->
+            <div class="phase-config-section">
+              <h5><i class="fas fa-pause-circle"></i> Configuración Avanzada Pausas</h5>
+              
+              <div class="mb-3">
+                <label class="form-label">Frecuencia de Pausas Metabólicas</label>
+                <select class="form-select" id="pause-frequency">
+                  <option value="0">No programar pausas metabólicas</option>
+                  <option value="6" selected>Cada 6 semanas</option>
+                  <option value="8">Cada 8 semanas(Recomendada)</option>
+                  <option value="10">Cada 10 semanas</option>
+                  <option value="12">Cada 12 semanas</option>
+                </select>
+                <div class="form-text text-muted">Las pausas metabólicas ayudan a recuperar el metabolismo durante planes prolongados</div>
+              </div>
+             
+              <!-- Configuración de macros para pausas -->
+              <div class="macro-config">
+                <div class="macro-input">
+                  <label>% Proteínas</label>
+                  <input type="number" id="proteinas-pausa-pct" value="20" step="1" min="15" max="25">
+                  <div class="macro-values" id="proteinas-pausa-gr">2.35 g/kg (185g)</div>
+                </div>
+                <div class="macro-input">
+                  <label>% Grasas</label>
+                  <input type="number" id="grasas-pausa-pct" value="35" step="1" min="20" max="35">
+                  <div class="macro-values" id="grasas-pausa-gr">3.13 g/kg (247g)</div>
+                </div>
+                <div class="macro-input">
+                  <label>% HC</label>
+                  <input type="number" id="hc-pausa-pct" value="45" step="1" min="25" max="45">
+                  <div class="macro-values" id="hc-pausa-gr">3.13 g/kg (247g)</div>
+                </div>
+              </div>
+              
+              <div class="form-group mb-3">
+                <label>Suma de porcentajes en pausa</label>
+                <div class="d-flex align-items-center">
+                  <span id="macros-pausa-total" class="badge bg-success">100</span>
+                  <small class="ms-2 text-muted">Debe sumar 100% para ser válido</small>
+                </div>
+                <div id="macro-pausa-warnings" class="text-warning mt-2" style="display: none;"></div>
+              </div>
+             
+              <div class="mb-3">
+                <h5> <i class="fas fa-tasks"></i>Frecuencia de Reevaluaciones</h5>
+                <select class="form-select" id="reeval-frequency">
+                  <option value="0">No programar reevaluaciones</option>
+                  <option value="4">Cada 6 semanas </option>
+                  <option value="8">Cada 8 semanas (Recomendada)</option>
+                  <option value="12" selected>Cada 12 semanas</option>
+                </select>
+                <div class="form-text text-muted">Las reevaluaciones permiten ajustar el plan según los resultados</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="save-config-btn" id="save-config-btn">
+          <i class="fas fa-save"></i> Guardar Configuración
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ </main>
+<!-- Coloca este div en tu archivo HTML -->
+
+    <footer>
+        <p>&copy; 2024 NutriPlan - Herramienta de planificación dietética orientativa. Consulta siempre a un profesional.</p>
+    </footer>
+	
+	
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="assets/js/pages/advanced-plan.js"></script>
+<script type="module">
+    // Importar módulo de seguridad primero
+    import { SecurityUtils, DOMUtils } from './assets/js/core/utils.js';
+    
+    // Hacer disponibles globalmente para compatibilidad
+    window.SecurityUtils = SecurityUtils;
+    window.DOMUtils = DOMUtils;
+    
+    // Ahora cargar el resto del código
+    import './assets/js/script.js';
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
