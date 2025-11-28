@@ -1,4 +1,4 @@
- <script>
+
         // --- Global variables ---
         // Basic user data
         let userAge = null;
@@ -23955,4 +23955,4 @@ document.getElementById("save-pdf-button").addEventListener("click", async funct
         // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', initializeUI);
     }	
-    </script>
+   
