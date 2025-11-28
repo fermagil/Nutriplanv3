@@ -1,0 +1,75 @@
+# ----------------------------
+# Sistema y entorno
+# ----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.swp
+*~
+.DS_Store?
+.AppleDouble
+.LSOverride
+
+# ----------------------------
+# Windows / OneDrive
+# ----------------------------
+OneDrive*
+$RECYCLE.BIN/
+System Volume Information/
+*.lnk
+
+# ----------------------------
+# Editor y desarrollo
+# ----------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de respaldo comunes
+* - copia.*
+*-backup.*
+*.bak
+*.old
+
+# ----------------------------
+# Firebase y entorno local
+# ----------------------------
+.firebase/
+.firebase.env
+firebase-debug.log
+
+# Configuraciones locales (¡NO subir secretos!)
+.env
+.env.local
+.env.development
+.env.production
+
+# ----------------------------
+# Node.js / herramientas (por si usas)
+# ----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ----------------------------
+# Datos sensibles o temporales
+# ----------------------------
+*.log
+/debug/
+/temp/
+/tmp/
+
+# Archivos de PowerShell temporales
+*.ps1~
+*.ps1.bak
+
+# Evitar subir datos personales o de prueba no intencionales
+/secret/
+/secrets/
+/config/
+local/
